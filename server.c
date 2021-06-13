@@ -1,28 +1,4 @@
 #include "minitalk.h"
-#include <stdio.h>
-
-char	*char_to_bitarr(char c)
-{
-	char	*bit_arr;
-	int		bit;
-	int		i;
-
-	bit_arr = malloc(9);
-	if (!bit_arr)
-		error("Allocation failure");
-	bit_arr[8] = '\0';
-	i = 7;
-	while (i >= 0)
-	{
-		bit = c & (1 << i);
-		if (bit == 0)
-			bit_arr[i] = '0';
-		else
-			bit_arr[i] = '1';
-		i--;
-	}
-	return (bit_arr);
-}
 
 char	*mt_strcharjoin(char *s, char c)
 {
@@ -53,34 +29,35 @@ void	receive(int sig)
 	if (!msg)
 	{
 		msg = (char*)malloc(1);
+		if (!msg)
+			error("Allocation failure");
 		msg[0] = '\0';
 	}
 	if (sig == SIGUSR2)
 	{
-		c = c >> 1;
-		c += 10;
+		c = c << 1;
+		c += 1;
 	}
 	else if (sig == SIGUSR1)
 	{
 		c = c << 1;
 	}
-	printf("c = %s\n", char_to_bitarr(c));
 	if (pos == 7)
 	{
 		msg = mt_strcharjoin(msg, c);
-		printf("msg = %s\n", msg);
 		if (c == '\0')
 		{
 			mt_putstring(msg);
 			free(msg);
 			msg = NULL;
 		}
-		//printf("reset\n");
 		pos = 0;
 		c = 0;
 	}
 	else
+	{
 		pos++;
+	}
 }
 
 void	print_server_pid(void)

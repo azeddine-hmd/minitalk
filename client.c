@@ -1,4 +1,6 @@
 #include "minitalk.h"
+#include <stdio.h>
+#include <string.h>
 
 char	*char_to_bitarr(char c)
 {
@@ -28,10 +30,10 @@ void	send_termination_signal(int pid)
 	int i;
 
 	i = 0;
-	while (i < 7)
+	while (i < 8)
 	{
 		kill(pid, SIGUSR1);
-		usleep(50);
+		usleep(SIGNAL_INTERVAL);
 		i++;
 	}
 }
@@ -48,15 +50,15 @@ void	send(int pid, const char *msg)
 		tmp = char_to_bitarr(msg[i]);
 		if (!tmp)
 			error("Allocation failure");
-		j = 0;
-		while (tmp[j])
+		j = strlen(tmp) - 1;
+		while (j >= 0)
 		{
 			if (tmp[j] == '0')
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(50);
-			j++;
+			usleep(SIGNAL_INTERVAL);
+			j--;
 		}
 		free(tmp);
 		i++;

@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <signal.h>
 
+# define SIGNAL_INTERVAL 200
+
 // utils
 void	mt_putchar(char c);
 void	mt_putstring(const char *s);
