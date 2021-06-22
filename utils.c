@@ -1,4 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahamdaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/18 18:36:44 by ahamdaou          #+#    #+#             */
+/*   Updated: 2021/06/21 19:24:32 by ahamdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
+
+int	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
 
 void	error(const char *err_msg)
 {
@@ -31,7 +53,7 @@ void	mt_putchar(char c)
 
 void	mt_putstring(const char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])

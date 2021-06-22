@@ -1,14 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahamdaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/18 18:37:38 by ahamdaou          #+#    #+#             */
+/*   Updated: 2021/06/21 19:26:51 by ahamdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
-char	*mt_strcharjoin(char *s, char c)
+static char	*mt_strcharjoin(char *s, char c)
 {
-	char *final;
-	int i;
+	char	*final;
+	int		i;
 
+	if (!s)
+	{
+		s = (char *)malloc(1);
+		if (!s)
+			error("Allocation failure");
+		s[0] = '\0';
+	}
 	i = 0;
 	while (s[i])
 		i++;
-	final = (char*)malloc(i + 2);
+	final = (char *)malloc(i + 2);
 	if (!final)
 		error("Allocation failure");
 	i = -1;
@@ -20,19 +39,20 @@ char	*mt_strcharjoin(char *s, char c)
 	return (final);
 }
 
-void	receive(int sig)
+static void	msg_concantenation_finished(char **msg)
+{
+	mt_putstring(*msg);
+	mt_putchar('\n');
+	free(*msg);
+	*msg = NULL;
+}
+
+static void	receive(int sig)
 {
 	static int	pos;
 	static char	c;
 	static char	*msg;
 
-	if (!msg)
-	{
-		msg = (char*)malloc(1);
-		if (!msg)
-			error("Allocation failure");
-		msg[0] = '\0';
-	}
 	if (sig == SIGUSR2)
 	{
 		c = c << 1;
@@ -46,21 +66,15 @@ void	receive(int sig)
 	{
 		msg = mt_strcharjoin(msg, c);
 		if (c == '\0')
-		{
-			mt_putstring(msg);
-			free(msg);
-			msg = NULL;
-		}
+			msg_concantenation_finished(&msg);
 		pos = 0;
 		c = 0;
 	}
 	else
-	{
 		pos++;
-	}
 }
 
-void	print_server_pid(void)
+static void	print_server_pid(void)
 {
 	char	*pid_str;
 
@@ -73,7 +87,7 @@ void	print_server_pid(void)
 	free(pid_str);
 }
 
-int			main(void)
+int	main(void)
 {
 	print_server_pid();
 	signal(SIGUSR1, &receive);

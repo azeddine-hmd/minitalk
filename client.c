@@ -1,8 +1,18 @@
-#include "minitalk.h"
-#include <stdio.h>
-#include <string.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahamdaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/18 18:37:30 by ahamdaou          #+#    #+#             */
+/*   Updated: 2021/06/21 19:27:09 by ahamdaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char	*char_to_bitarr(char c)
+#include "minitalk.h"
+
+static char	*char_to_bitarr(char c)
 {
 	char	*bit_arr;
 	int		bit;
@@ -25,9 +35,9 @@ char	*char_to_bitarr(char c)
 	return (bit_arr);
 }
 
-void	send_termination_signal(int pid)
+static void	send_termination_signal(int pid)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 8)
@@ -38,10 +48,10 @@ void	send_termination_signal(int pid)
 	}
 }
 
-void	send(int pid, const char *msg)
+static void	send(int pid, const char *msg)
 {
 	char	*tmp;
-	int 	i;
+	int		i;
 	int		j;
 
 	i = 0;
@@ -50,7 +60,7 @@ void	send(int pid, const char *msg)
 		tmp = char_to_bitarr(msg[i]);
 		if (!tmp)
 			error("Allocation failure");
-		j = strlen(tmp) - 1;
+		j = ft_strlen(tmp) - 1;
 		while (j >= 0)
 		{
 			if (tmp[j] == '0')
@@ -66,7 +76,7 @@ void	send(int pid, const char *msg)
 	send_termination_signal(pid);
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	int	pid;
 

@@ -1,13 +1,13 @@
 #include "minitalk.h"
 
-int		ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (c);
 	return (0);
 }
 
-int		mt_atoi(const char *str)
+int	mt_atoi(const char *str)
 {
 	int		i;
 	int		signe;
@@ -17,8 +17,8 @@ int		mt_atoi(const char *str)
 	signe = 1;
 	result = 0;
 	while (str[i] != '\0' && (str[i] == '\t' || str[i] == '\n'
-				|| str[i] == '\r' || str[i] == '\v'
-				|| str[i] == '\f' || str[i] == ' '))
+			|| str[i] == '\r' || str[i] == '\v'
+			|| str[i] == '\f' || str[i] == ' '))
 		i++;
 	if (str[i] == '-')
 		signe = -1;

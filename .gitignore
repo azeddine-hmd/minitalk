@@ -51,10 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# executable
+# ctags
 server
 client
-
-# ctags
-tags
 **/tags
