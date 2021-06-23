@@ -6,11 +6,11 @@
 /*   By: ahamdaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:37:30 by ahamdaou          #+#    #+#             */
-/*   Updated: 2021/06/23 15:09:03 by ahamdaou         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:10:20 by ahamdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 static char	*char_to_bitarr(char c)
 {
