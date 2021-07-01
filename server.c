@@ -6,52 +6,24 @@
 /*   By: ahamdaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:37:38 by ahamdaou          #+#    #+#             */
-/*   Updated: 2021/06/23 15:08:17 by ahamdaou         ###   ########.fr       */
+/*   Updated: 2021/06/26 17:48:20 by ahamdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <stdio.h>
 
-static char	*mt_strcharjoin(char *s, char c)
+static void	display_message(t_buf **buf)
 {
-	char	*final;
-	int		i;
-
-	if (!s)
-	{
-		s = (char *)malloc(1);
-		if (!s)
-			error("Allocation failure");
-		s[0] = '\0';
-	}
-	i = 0;
-	while (s[i])
-		i++;
-	final = (char *)malloc(i + 2);
-	if (!final)
-		error("Allocation failure");
-	i = -1;
-	while (s[++i])
-		final[i] = s[i];
-	final[i] = c;
-	final[i + 1] = 0;
-	free(s);
-	return (final);
-}
-
-static void	msg_concantenation_finished(char **msg)
-{
-	mt_putstring(*msg);
+	mt_putstring((*buf)->buffer);
 	mt_putchar('\n');
-	free(*msg);
-	*msg = NULL;
+	buffer_reset(buf);
 }
 
 static void	receive(int sig)
 {
-	static int	pos;
-	static char	c;
-	static char	*msg;
+	static int		pos;
+	static char		c;
 
 	if (sig == SIGUSR2)
 	{
@@ -64,9 +36,9 @@ static void	receive(int sig)
 	}
 	if (pos == 7)
 	{
-		msg = mt_strcharjoin(msg, c);
+		buffer_add(getbuf(), c);
 		if (c == '\0')
-			msg_concantenation_finished(&msg);
+			display_message(getbuf());
 		pos = 0;
 		c = 0;
 	}
@@ -90,6 +62,7 @@ static void	print_server_pid(void)
 int	main(void)
 {
 	print_server_pid();
+	buffer_init(getbuf());
 	signal(SIGUSR1, &receive);
 	signal(SIGUSR2, &receive);
 	while (1)
